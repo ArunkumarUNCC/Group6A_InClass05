@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         fPrecipLayout = findViewById(R.id.precipitationLayout);
 //        fPrecipLayout.setVisibility(View.INVISIBLE);
 
+        //Check-1
         resetText();
     }
 
