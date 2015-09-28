@@ -3,4 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="okButtonOnClick">Ok</string>
+    <string name="parserSwitch">Use Pull/SAX Parser</string>
+    <string name="okOnClick">okOnClick</string>
+    <string name="switchOnClick">switchOnClick</string>
 </resources>
