@@ -3,10 +3,15 @@ package com.group6a_inclass05.group6a_inclass05;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
 import android.util.Log;
+
+import android.text.Layout;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import org.xml.sax.SAXException;
 
@@ -20,11 +25,34 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
 
-    private static String APIURL = "http://api.openweathermap.org/data/2.5/forecast?";
+
+    private static String APIURL = "http://api.openweathermap.org/data/2.5/forecast?q=Chicago&mode=xml&cnt=8&units=imperial";
+
+    TextView fLocation, fMaxTemp, fMinTemp, fTemperature,fHumidity,
+            fPressure, fWind, fClouds, fPercipitation;
+
+    View fPrecipLayout;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fLocation = (TextView) findViewById(R.id.textViewLocationAct);
+        fMaxTemp = (TextView) findViewById(R.id.textViewMaxTempAct);
+        fMinTemp = (TextView) findViewById(R.id.textViewMinTempAct);
+        fTemperature = (TextView) findViewById(R.id.textViewTemp);
+        fHumidity = (TextView) findViewById(R.id.textViewHumidity);
+        fPressure = (TextView) findViewById(R.id.textViewPressure);
+        fWind = (TextView) findViewById(R.id.textViewWind);
+        fClouds = (TextView) findViewById(R.id.textViewClouds);
+        fPercipitation = (TextView) findViewById(R.id.textViewPercipitation);
+
+        fPrecipLayout = findViewById(R.id.precipitationLayout);
+//        fPrecipLayout.setVisibility(View.INVISIBLE);
+
+        resetText();
     }
 
     @Override
@@ -52,14 +80,15 @@ public class MainActivity extends AppCompatActivity {
     public void okOnClick(View aView){
 
 
-//        new WeatherAsyncTask().execute(APIURL + "q=" +  + "&mode=xml&cnt=8&units=imperial");
+        new WeatherAsyncTask().execute(APIURL);
     }
 
     public void switchOnClick(View aView){
 
     }
 
-    private class WeatherAsyncTask extends AsyncTask<String,Void,ArrayList<Weather>>{
+
+    private class WeatherAsyncTask extends AsyncTask<String,Void,ArrayList<Weather>> {
 
         @Override
         protected ArrayList<Weather> doInBackground(String... params) {
@@ -71,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 connection.connect();
 
                 int status = connection.getResponseCode();
-                if (status == HttpURLConnection.HTTP_OK){
+                if (status == HttpURLConnection.HTTP_OK) {
                     InputStream in = connection.getInputStream();
 
                     return WeatherUtil.weatherSAXParser.parseWeather(in);
@@ -91,9 +120,31 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(ArrayList<Weather> weathers) {
             super.onPostExecute(weathers);
 
-            if (weathers!=null){
-                Log.d("Weather SAX Parser",weathers.toString());
+            if (weathers != null) {
+                Log.d("Weather SAX Parser", weathers.toString());
             }
         }
+
+    }
+
+    public void nextOnClick(View aView){
+
+    }
+
+    public void previousOnClick (View aView){
+
+    }
+
+    public void resetText(){
+        fLocation.setText("");
+        fMaxTemp.setText("");
+        fMinTemp.setText("");
+        fTemperature.setText("");
+        fHumidity.setText("");
+        fPressure.setText("");
+        fWind.setText("");
+        fClouds.setText("");
+        fPercipitation.setText("");
+
     }
 }
