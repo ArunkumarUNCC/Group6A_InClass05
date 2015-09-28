@@ -7,4 +7,16 @@
     <string name="parserSwitch">Use Pull/SAX Parser</string>
     <string name="okOnClick">okOnClick</string>
     <string name="switchOnClick">switchOnClick</string>
+    <string name="nextOnClick">nextOnClick</string>
+    <string name="previousOnClick">previousOnClick</string>
+    <string name="textHint">Enter City, Country</string>
+    <string name="locationText">Location:</string>
+    <string name="maxTempText">Max Temp:</string>
+    <string name="minTempText">Min Temp:</string>
+    <string name="temperature">Temperature:</string>
+    <string name="humidty">Humidity:</string>
+    <string name="pressure">Pressure:</string>
+    <string name="wind">Wind:</string>
+    <string name="clouds">Clouds:</string>
+    <string name="percipitation">Percipitation:</string>
 </resources>

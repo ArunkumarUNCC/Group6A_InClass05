@@ -2,16 +2,39 @@ package com.group6a_inclass05.group6a_inclass05;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
+
+    TextView fLocation, fMaxTemp, fMinTemp, fTemperature,fHumidity,
+            fPressure, fWind, fClouds, fPercipitation;
+
+    View fPrecipLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fLocation = (TextView) findViewById(R.id.textViewLocationAct);
+        fMaxTemp = (TextView) findViewById(R.id.textViewMaxTempAct);
+        fMinTemp = (TextView) findViewById(R.id.textViewMinTempAct);
+        fTemperature = (TextView) findViewById(R.id.textViewTemp);
+        fHumidity = (TextView) findViewById(R.id.textViewHumidity);
+        fPressure = (TextView) findViewById(R.id.textViewPressure);
+        fWind = (TextView) findViewById(R.id.textViewWind);
+        fClouds = (TextView) findViewById(R.id.textViewClouds);
+        fPercipitation = (TextView) findViewById(R.id.textViewPercipitation);
+
+        fPrecipLayout = findViewById(R.id.precipitationLayout);
+//        fPrecipLayout.setVisibility(View.INVISIBLE);
+
+        resetText();
     }
 
     @Override
@@ -42,5 +65,25 @@ public class MainActivity extends AppCompatActivity {
 
     public void switchOnClick(View aView){
 
+    }
+
+    public void nextOnClick(View aView){
+
+    }
+
+    public void previousOnClick (View aView){
+
+    }
+
+    public void resetText(){
+        fLocation.setText("");
+        fMaxTemp.setText("");
+        fMinTemp.setText("");
+        fTemperature.setText("");
+        fHumidity.setText("");
+        fPressure.setText("");
+        fWind.setText("");
+        fClouds.setText("");
+        fPercipitation.setText("");
     }
 }
