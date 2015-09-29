@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import org.xml.sax.SAXException;
@@ -28,6 +29,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+//    private static String APIURL = "http://api.openweathermap.org/data/2.5/forecast?q=Chicago&mode=xml&cnt=8&units=imperial";
+    private static String fAPIURL = "http://api.openweathermap.org/data/2.5/forecast?";
 
 
     private final static String APIURL = "http://api.openweathermap.org/data/2.5/forecast?q=Chicago&mode=xml&cnt=8&units=imperial";
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     TextView fLocation, fMaxTemp, fMinTemp, fTemperature,fHumidity,
             fPressure, fWind, fClouds, fPercipitation;
+    EditText fEditLocation;
 
     View fPrecipLayout, flocationLayout, fmaxTempLayout, fminTempLayout, fTemperatureLayout, fHumidtyLayout,
             fPressureLayout, fWindLayout, fCloundsLayout;
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        fEditLocation = (EditText) findViewById(R.id.editText);
         fLocation = (TextView) findViewById(R.id.textViewLocationAct);
         fMaxTemp = (TextView) findViewById(R.id.textViewMaxTempAct);
         fMinTemp = (TextView) findViewById(R.id.textViewMinTempAct);
@@ -98,8 +103,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void okOnClick(View aView){
 
+        String[] lLocation = fEditLocation.getText().toString().split(",",-1);
 
-        new WeatherAsyncTask().execute(APIURL);
+        new WeatherAsyncTask().execute(fAPIURL + "q=" + lLocation[0] + "&mode=xml&cnt=8&units=imperial");
+
+
     }
 
     public void switchOnClick(View aView){

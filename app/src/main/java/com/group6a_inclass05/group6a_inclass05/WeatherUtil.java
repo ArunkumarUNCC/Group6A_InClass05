@@ -71,13 +71,13 @@ public class WeatherUtil {
 
                 weather.setWindSpeed(attributes.getValue("name"));
             } else if (localName.equals("temperature")){
-                weather.setTemperature(attributes.getValue("value") + "" + attributes.getValue("unit"));
-                weather.setMinTemperature(attributes.getValue("min") + "" + attributes.getValue("unit"));
-                weather.setMaxTemperature(attributes.getValue("max") +  "" + attributes.getValue("unit"));
+                weather.setTemperature(attributes.getValue("value") + " " + attributes.getValue("unit"));
+                weather.setMinTemperature(attributes.getValue("min") + " " + attributes.getValue("unit"));
+                weather.setMaxTemperature(attributes.getValue("max") +  " " + attributes.getValue("unit"));
             } else if (localName.equals("pressure")){
-                weather.setPressure(attributes.getValue("value") + "" + attributes.getValue("unit"));
+                weather.setPressure(attributes.getValue("value") + " " + attributes.getValue("unit"));
             } else if (localName.equals("humidity")){
-                weather.setHumidity(attributes.getValue("value") + "" + attributes.getValue("unit"));
+                weather.setHumidity(attributes.getValue("value") + " " + attributes.getValue("unit"));
             } else if (localName.equals("clouds")){
                 weather.setClouds(attributes.getValue("value"));
             }
