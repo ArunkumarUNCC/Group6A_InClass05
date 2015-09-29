@@ -32,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
             fPressure, fWind, fClouds, fPercipitation;
     EditText fEditLocation;
 
-    View fPrecipLayout;
+    View fPrecipLayout, flocationLayout, fmaxTempLayout, fminTempLayout, fTemperatureLayout, fHumidtyLayout,
+            fPressureLayout, fWindLayout, fCloundsLayout;
 
 
     @Override
@@ -51,10 +52,18 @@ public class MainActivity extends AppCompatActivity {
         fClouds = (TextView) findViewById(R.id.textViewClouds);
         fPercipitation = (TextView) findViewById(R.id.textViewPercipitation);
 
-        fPrecipLayout = findViewById(R.id.precipitationLayout);
-//        fPrecipLayout.setVisibility(View.INVISIBLE);
 
-        //Check-1
+        flocationLayout = findViewById(R.id.locationLayout);
+        fmaxTempLayout = findViewById(R.id.maxTempLayout);
+        fminTempLayout = findViewById(R.id.minTempLayout);
+        fPrecipLayout = findViewById(R.id.precipitationLayout);
+        fTemperatureLayout = findViewById(R.id.tempLayout);
+        fPressureLayout = findViewById(R.id.pressureLayout);
+        fWindLayout = findViewById(R.id.windLayout);
+        fHumidtyLayout = findViewById(R.id.humidtyLayout);
+        fCloundsLayout = findViewById(R.id.cloudsLayout);
+
+        setVisibillity(false);
         resetText();
     }
 
@@ -152,5 +161,29 @@ public class MainActivity extends AppCompatActivity {
         fClouds.setText("");
         fPercipitation.setText("");
 
+    }
+
+    public void setVisibillity (boolean aVisible){
+        if(!aVisible){
+            flocationLayout.setVisibility(View.VISIBLE);
+            fmaxTempLayout.setVisibility(View.VISIBLE);
+            fminTempLayout.setVisibility(View.VISIBLE);
+            fPrecipLayout.setVisibility(View.VISIBLE);
+            fTemperatureLayout.setVisibility(View.VISIBLE);
+            fPressureLayout.setVisibility(View.VISIBLE);
+            fWindLayout.setVisibility(View.VISIBLE);
+            fHumidtyLayout.setVisibility(View.VISIBLE);
+            fCloundsLayout.setVisibility(View.VISIBLE);
+        }else{
+            flocationLayout.setVisibility(View.INVISIBLE);
+            fmaxTempLayout.setVisibility(View.INVISIBLE);
+            fminTempLayout.setVisibility(View.INVISIBLE);
+            fPrecipLayout.setVisibility(View.INVISIBLE);
+            fTemperatureLayout.setVisibility(View.INVISIBLE);
+            fPressureLayout.setVisibility(View.INVISIBLE);
+            fWindLayout.setVisibility(View.INVISIBLE);
+            fHumidtyLayout.setVisibility(View.INVISIBLE);
+            fCloundsLayout.setVisibility(View.INVISIBLE);
+        }
     }
 }
