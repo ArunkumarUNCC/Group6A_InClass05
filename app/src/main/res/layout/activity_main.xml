@@ -82,7 +82,7 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/linearLayout3Text"
+        android:id="@+id/locationLayout"
         android:layout_marginTop="47dp"
         android:layout_below="@+id/switchParser"
         android:layout_alignParentRight="true"
@@ -115,8 +115,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:id="@+id/linearLayout4Text"
-        android:layout_below="@+id/linearLayout3Text"
+        android:id="@+id/maxTempLayout"
+        android:layout_below="@+id/locationLayout"
         android:layout_alignParentRight="true">
 
         <TextView
@@ -146,8 +146,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:id="@+id/linearLayoutText"
-        android:layout_below="@+id/linearLayout4Text"
+        android:id="@+id/minTempLayout"
+        android:layout_below="@+id/maxTempLayout"
         android:layout_alignParentRight="true">
 
         <TextView
