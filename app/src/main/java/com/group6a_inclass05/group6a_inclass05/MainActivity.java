@@ -1,5 +1,7 @@
 package com.group6a_inclass05.group6a_inclass05;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.xml.sax.SAXException;
@@ -19,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -26,13 +30,16 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    private static String APIURL = "http://api.openweathermap.org/data/2.5/forecast?q=Chicago&mode=xml&cnt=8&units=imperial";
+    private final static String APIURL = "http://api.openweathermap.org/data/2.5/forecast?q=Chicago&mode=xml&cnt=8&units=imperial";
+    String fImgURL = "“http://openweathermap.org/img/w/";
 
     TextView fLocation, fMaxTemp, fMinTemp, fTemperature,fHumidity,
             fPressure, fWind, fClouds, fPercipitation;
 
     View fPrecipLayout, flocationLayout, fmaxTempLayout, fminTempLayout, fTemperatureLayout, fHumidtyLayout,
             fPressureLayout, fWindLayout, fCloundsLayout;
+
+    ImageView fWeatherIcon;
 
 
     @Override
@@ -60,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
         fWindLayout = findViewById(R.id.windLayout);
         fHumidtyLayout = findViewById(R.id.humidtyLayout);
         fCloundsLayout = findViewById(R.id.cloudsLayout);
+
+        fWeatherIcon = (ImageView) findViewById(R.id.imageViewWeatherIcon);
 
         setVisibillity(false);
         resetText();
@@ -106,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 URL url = new URL(params[0]);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
+
 
                 connection.connect();
 
@@ -159,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setVisibillity (boolean aVisible){
-        if(!aVisible){
+        if(aVisible){
             flocationLayout.setVisibility(View.VISIBLE);
             fmaxTempLayout.setVisibility(View.VISIBLE);
             fminTempLayout.setVisibility(View.VISIBLE);
@@ -169,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
             fWindLayout.setVisibility(View.VISIBLE);
             fHumidtyLayout.setVisibility(View.VISIBLE);
             fCloundsLayout.setVisibility(View.VISIBLE);
+            fWeatherIcon.setVisibility(View.VISIBLE);
         }else{
             flocationLayout.setVisibility(View.INVISIBLE);
             fmaxTempLayout.setVisibility(View.INVISIBLE);
@@ -179,6 +190,43 @@ public class MainActivity extends AppCompatActivity {
             fWindLayout.setVisibility(View.INVISIBLE);
             fHumidtyLayout.setVisibility(View.INVISIBLE);
             fCloundsLayout.setVisibility(View.INVISIBLE);
+            fWeatherIcon.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public class GetImageAsyncTask extends AsyncTask<String, String, Bitmap>{
+
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+            Bitmap lBitmap = null;
+            try {
+                URL lUrl = new URL(fImgURL);
+                HttpURLConnection lCon = (HttpURLConnection) lUrl.openConnection();
+                lCon.setRequestMethod("GET");
+                lCon.connect();
+
+                lBitmap = BitmapFactory.decodeStream(lCon.getInputStream());
+                lCon.getInputStream().close();
+
+                return lBitmap;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+
+
+            fWeatherIcon.setImageBitmap(bitmap);
         }
     }
 }
