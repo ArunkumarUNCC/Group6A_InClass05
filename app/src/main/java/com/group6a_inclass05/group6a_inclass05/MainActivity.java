@@ -12,9 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import org.xml.sax.SAXException;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,10 +33,12 @@ public class MainActivity extends AppCompatActivity {
     TextView fLocation, fMaxTemp, fMinTemp, fTemperature,fHumidity,
             fPressure, fWind, fClouds, fPercipitation;
     EditText fEditLocation;
+    Switch fXMLMethod;
 
     View fPrecipLayout, flocationLayout, fmaxTempLayout, fminTempLayout, fTemperatureLayout, fHumidtyLayout,
             fPressureLayout, fWindLayout, fCloundsLayout;
 
+    static ArrayList<Weather> fWeatherData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fEditLocation = (EditText) findViewById(R.id.editText);
+        fXMLMethod = (Switch) findViewById(R.id.switchParser);
         fLocation = (TextView) findViewById(R.id.textViewLocationAct);
         fMaxTemp = (TextView) findViewById(R.id.textViewMaxTempAct);
         fMinTemp = (TextView) findViewById(R.id.textViewMinTempAct);
@@ -93,7 +98,9 @@ public class MainActivity extends AppCompatActivity {
 
         String[] lLocation = fEditLocation.getText().toString().split(",",-1);
 
-        new WeatherAsyncTask().execute(fAPIURL + "q=" + lLocation[0] + "&mode=xml&cnt=8&units=imperial");
+        if(fXMLMethod.isChecked())
+            new WeatherAsyncTask("SAX").execute(fAPIURL + "q=" + lLocation[0] + "&mode=xml&cnt=8&units=imperial");
+        else new WeatherAsyncTask("Pull").execute(fAPIURL + "q=" + lLocation[0] + "&mode=xml&cnt=8&units=imperial");
 
 
     }
@@ -104,6 +111,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     private class WeatherAsyncTask extends AsyncTask<String,Void,ArrayList<Weather>> {
+        String lXMLMethod;
+
+        public WeatherAsyncTask(String lXMLMethod) {
+            this.lXMLMethod = lXMLMethod;
+        }
 
         @Override
         protected ArrayList<Weather> doInBackground(String... params) {
@@ -118,13 +130,17 @@ public class MainActivity extends AppCompatActivity {
                 if (status == HttpURLConnection.HTTP_OK) {
                     InputStream in = connection.getInputStream();
 
-                    return WeatherUtil.weatherSAXParser.parseWeather(in);
+                    if (lXMLMethod.equals("SAX"))
+                        return WeatherUtil.weatherSAXParser.parseWeather(in);
+                    else return WeatherUtil.weatherPullParser.parseWeather(in);
                 }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (XmlPullParserException e) {
                 e.printStackTrace();
             }
 
@@ -136,7 +152,9 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(weathers);
 
             if (weathers != null) {
-                Log.d("Weather SAX Parser", weathers.toString());
+                fWeatherData = new ArrayList<Weather>();
+                fWeatherData = weathers;
+                populateViews(0);
             }
         }
 
@@ -185,5 +203,17 @@ public class MainActivity extends AppCompatActivity {
             fHumidtyLayout.setVisibility(View.INVISIBLE);
             fCloundsLayout.setVisibility(View.INVISIBLE);
         }
+    }
+
+    public void populateViews(int index){
+        fLocation.setText(fEditLocation.getText().toString().split(",",-1)[0]);
+        fMaxTemp.setText(fWeatherData.get(index).getMaxTemperature());
+        fMinTemp.setText(fWeatherData.get(index).getMinTemperature());
+        fTemperature.setText(fWeatherData.get(index).getTemperature());
+        fHumidity.setText(fWeatherData.get(index).getHumidity());
+        fPressure.setText(fWeatherData.get(index).getPressure());
+        fWind.setText(fWeatherData.get(index).getWindSpeed() + "," + fWeatherData.get(index).getWindDirection());
+        fClouds.setText(fWeatherData.get(index).getClouds());
+        fPercipitation.setText(fWeatherData.get(index).getPrecipitation());
     }
 }

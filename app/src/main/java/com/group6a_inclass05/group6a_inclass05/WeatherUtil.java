@@ -5,6 +5,9 @@ import android.util.Xml;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,21 +51,11 @@ public class WeatherUtil {
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             super.startElement(uri, localName, qName, attributes);
 
-            /*<symbol number="500" name="light rain" var="10n"/>
-<precipitation unit="3h" value="1.2" type="rain"/>
-<windDirection deg="48.0013" code="NE" name="NorthEast"/>
-<windSpeed mps="10.2" name="Fresh Breeze"/>
-<temperature unit="imperial" value="72.86" min="69.88" max="72.86"/>
-<pressure unit="hPa" value="1000.8"/>
-<humidity value="98" unit="%"/>
-<clouds value="overcast clouds" all="100" unit="%"/>*/
-
-
 
             if (localName.equals("time")){
                 weather = new Weather();
             } else if (localName.equals("symbol")){
-                weather.setSymbol(attributes.getValue("name"));
+                weather.setSymbol(attributes.getValue("var"));
             } else if (localName.equals("precipitation")){
                 weather.setPrecipitation(attributes.getValue("type"));
             } else if (localName.equals("windDirection")){
@@ -100,7 +93,60 @@ public class WeatherUtil {
         }
     }
 
-    static public class weatherPullParser{
+    static public class weatherPullParser extends DefaultHandler{
 
+
+        static ArrayList<Weather> parseWeather(InputStream in) throws XmlPullParserException, IOException {
+            XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
+            parser.setInput(in,"UTF-8");
+
+            Weather weather = null;
+            ArrayList<Weather> weatherList = new ArrayList<Weather>();
+
+            int event = parser.getEventType();
+
+            while(event != XmlPullParser.END_DOCUMENT) {
+
+                switch (event) {
+                    case XmlPullParser.START_TAG:
+
+                        if (parser.getName().equals("time")){
+                            weather = new Weather();
+                        } else if (parser.getName().equals("symbol")){
+                            weather.setSymbol(parser.getAttributeValue(null, "var"));
+                        } else if (parser.getName().equals("precipitation")){
+                            weather.setPrecipitation(parser.getAttributeValue(null, "type"));
+                        } else if (parser.getName().equals("windDirection")){
+                            weather.setWindDirection(parser.getAttributeValue(null, "name"));
+                        } else if (parser.getName().equals("windSpeed")){
+
+                            weather.setWindSpeed(parser.getAttributeValue(null, "name"));
+                        } else if (parser.getName().equals("temperature")){
+                            weather.setTemperature(parser.getAttributeValue(null, "value") + " " + parser.getAttributeValue(null, "unit"));
+                            weather.setMinTemperature(parser.getAttributeValue(null, "min") + " " + parser.getAttributeValue(null,"unit"));
+                            weather.setMaxTemperature(parser.getAttributeValue(null, "max") + " " + parser.getAttributeValue(null, "unit"));
+                        } else if (parser.getName().equals("pressure")){
+                            weather.setPressure(parser.getAttributeValue(null, "value") + " " + parser.getAttributeValue(null,"unit"));
+                        } else if (parser.getName().equals("humidity")){
+                            weather.setHumidity(parser.getAttributeValue(null, "value") + " " + parser.getAttributeValue(null, "unit"));
+                        } else if (parser.getName().equals("clouds")){
+                            weather.setClouds(parser.getAttributeValue(null,"value"));
+                        }
+
+                        break;
+                    case XmlPullParser.END_TAG:
+                        if (parser.getName().equals("time")){
+                            weatherList.add(weather);
+                            weather = null;
+                        }
+                        break;
+                    default:break;
+                }
+
+                event = parser.next();
+            }
+
+            return weatherList;
+        }
     }
 }
